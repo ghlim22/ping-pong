@@ -4,4 +4,12 @@ from . import views
 
 app_name = "todo"
 
-url_patterns = [path("list/", views.todo_list, name="list")]
+urlpatterns = [
+    path("list/", views.todo_list, name="list"),
+    path("detail/<int:pk>/", views.todo_detail, name="detail"),
+    path("create/", views.todo_create, name="create"),
+    path("edit/<int:pk>", views.todo_edit, name="edit"),
+    path("done_list/", views.todo_done_list, name="done_list"),
+    path("done/<int:pk>/", views.todo_done, name="done"),
+    path("delete/<int:pk>/", views.todo_delete, name="delete"),
+]
