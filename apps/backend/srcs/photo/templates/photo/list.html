@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Photos</title>
+</head>
+<body>
+<h1><a href="">Photo list</a></h1>
+<section>
+    {% for photo in photos %}
+    <div>
+        <h2>
+            <a href="{% url 'photo:detail' pk=photo.pk %}">{{ photo.title }}</a>
+        </h2>
+        <img src="{{ photo.src }}" alt="{{ photo.title }}" width="300" />
+        <p>{{ photo.author }} ${{ photo.price }}</p>
+    </div>
+    {% endfor %}
+</section>
+<div>
+    <a href="{% url 'photo:create' %}">new photo</a>
+</div>
+</body>
+</html>
