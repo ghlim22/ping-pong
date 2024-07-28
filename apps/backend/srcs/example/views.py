@@ -1,9 +1,22 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions, status, viewsets
+from rest_framework import generics, mixins, permissions, status, viewsets
 from rest_framework.decorators import api_view
+from rest_framework.generics import (
+    GenericAPIView,
+    ListCreateAPIView,
+    RetrieveUpdateDestroyAPIView,
+)
+from rest_framework.mixins import (
+    CreateModelMixin,
+    DestroyModelMixin,
+    ListModelMixin,
+    RetrieveModelMixin,
+    UpdateModelMixin,
+)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from . import models, serializers
 from .models import Book
 from .serializers import BookSerializer
 
@@ -66,3 +79,50 @@ class BookAPI(APIView):
         book = get_object_or_404(Book, pk=pk)
         serializer = BookSerializer(book)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class BooksAPIMixins(GenericAPIView, ListModelMixin, CreateModelMixin):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+    # List
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    # Create
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class BookAPIMixins(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+    # lookup_field = "book_id"
+
+    # Retrieve
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    # Update
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    # Delete
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
+class BooksAPIGeneric(ListCreateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+
+class BookAPIGeneric(RetrieveUpdateDestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = models.Book.objects.all()
+    serializer_class = serializers.BookSerializer

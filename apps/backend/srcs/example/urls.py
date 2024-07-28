@@ -19,13 +19,24 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from rest_framework import routers
 
 from . import views
 
 app_name = "example"
 
-urlpatterns = [
-    path("hello/", views.hello),
-    path("fbv/books/", views.booksAPI),
-    path("fbv/books/<int:pk>/", views.bookAPI),
-]
+# urlpatterns = [
+#     path("hello/", views.hello),
+#     path("fbv/books/", views.booksAPI),
+#     path("fbv/books/<int:pk>/", views.bookAPI),
+#     path("cbv/books/", views.BooksAPI.as_view()),
+#     path("cbv/books/<int:pk>/", views.BookAPI.as_view()),
+#     path("mixin/books/", views.BooksAPIMixins.as_view()),
+#     path("mixin/books/<int:pk>/", views.BookAPIMixins.as_view()),
+#     path("generic/books/", views.BooksAPIGeneric.as_view()),
+#     path("generic/books/<int:pk>/", views.BookAPIGeneric.as_view()),
+# ]
+
+router = routers.SimpleRouter()
+router.register("books", views.BookViewSet)
+urlpatterns = router.get_urls()
