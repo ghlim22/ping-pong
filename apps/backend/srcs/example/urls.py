@@ -24,4 +24,8 @@ from . import views
 
 app_name = "example"
 
-urlpatterns = [path("hello/", views.hello)]
+urlpatterns = [
+    path("hello/", views.hello),
+    path("fbv/books/", views.booksAPI),
+    path("fbv/books/<int:pk>/", views.bookAPI),
+]
